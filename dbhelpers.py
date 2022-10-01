@@ -22,12 +22,16 @@ def execute_statement(cursor, statement, list_of_args=[]):
         return result
     except mariadb.ProgrammingError as error:
         print("Programming ERROR: ", error)
+        return str(error)
     except mariadb.IntegrityError as error:
         print("Integrity ERROR: ", error)
+        return str(error)
     except mariadb.DatabaseError as error:
         print("Data ERROR: ", error)
+        return str(error)
     except Exception as error:
         print("Unexpected ERROR: ", error)
+        return str(error)
 
 
 def close_connect(cursor):
@@ -41,3 +45,12 @@ def close_connect(cursor):
         print("Internal ERROR: ", error)
     except Exception as error:
         print("Unexpected ERROR: ", error)
+
+
+def run_statement(statement, list_of_args=[]):
+    cursor = connect_db()
+    if (cursor == None):
+        return "Connection Error"
+    results = execute_statement(cursor, statement, list_of_args)
+    close_connect(cursor)
+    return results
